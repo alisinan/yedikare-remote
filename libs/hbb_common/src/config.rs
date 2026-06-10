@@ -43,7 +43,7 @@ pub const CONFIG_OPTION_ALLOW_LINUX_HEADLESS: &str = "allow-linux-headless";
 
 #[cfg(target_os = "macos")]
 lazy_static::lazy_static! {
-    pub static ref ORG: Arc<RwLock<String>> = Arc::new(RwLock::new("com.hoptodesk".to_owned()));
+    pub static ref ORG: Arc<RwLock<String>> = Arc::new(RwLock::new("com.yedikare".to_owned()));
 }
 
 type Size = (i32, i32, i32, i32);
@@ -58,7 +58,7 @@ lazy_static::lazy_static! {
     static ref LOCAL_CONFIG: Arc<RwLock<LocalConfig>> = Arc::new(RwLock::new(LocalConfig::load()));
     static ref TRUSTED_DEVICES: RwLock<(Vec<TrustedDevice>, bool)> = Default::default();
     static ref ONLINE: Arc<Mutex<HashMap<String, i64>>> = Default::default();
-	pub static ref APP_NAME: Arc<RwLock<String>> = Arc::new(RwLock::new("HopToDesk".to_owned()));
+	pub static ref APP_NAME: Arc<RwLock<String>> = Arc::new(RwLock::new("YedikareRemote".to_owned()));
     static ref KEY_PAIR: Arc<Mutex<Option<(Vec<u8>, Vec<u8>)>>> = Default::default();
     static ref USER_DEFAULT_CONFIG: RwLock<(UserDefaultConfig, Instant)> = RwLock::new((UserDefaultConfig::load(), Instant::now()));
     pub static ref NEW_STORED_PEER_CONFIG: Mutex<HashSet<String>> = Default::default();

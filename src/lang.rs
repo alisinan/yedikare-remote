@@ -174,12 +174,25 @@ pub fn translate_locale(name: String, locale: &str) -> String {
         if v.is_empty() {
             if lang != "en" {
                 if let Some(v) = en::T.get(&name as &str) {
-                    return v.to_string();
+                    return replace_app_name(v);
                 }
             }
         } else {
-            return v.to_string();
+            return replace_app_name(v);
         }
     }
-    name
+    replace_app_name(&name)
+}
+
+// Translation values still mention the upstream app name; swap in ours at lookup
+// time so lang/*.rs files stay untouched and merge cleanly with upstream.
+fn replace_app_name(s: &str) -> String {
+    if s.contains("HopToDesk") {
+        s.replace(
+            "HopToDesk",
+            &hbb_common::config::APP_NAME.read().unwrap(),
+        )
+    } else {
+        s.to_string()
+    }
 }

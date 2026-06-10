@@ -211,10 +211,10 @@ libxdo-sys = { path = "libs/libxdo-sys-stub" }
 stun = { path = "libs/stun" }
 
 [package.metadata.winres]
-LegalCopyright = "Copyright © 2026 Begonia Holdings.  Copyright © 2026 Purslane Ltd."
-ProductName = "HopToDesk"
-FileDescription = "HopToDesk"
-CompanyName = "Begonia Holdings"
+LegalCopyright = "Copyright © 2026 Yedikare. Based on HopToDesk: Copyright © 2026 Begonia Holdings, Copyright © 2026 Purslane Ltd."
+ProductName = "Yedikare Remote"
+FileDescription = "Yedikare Remote"
+CompanyName = "Yedikare"
 
 [target.'cfg(target_os="windows")'.build-dependencies]
 winres = "0.1"
@@ -230,8 +230,8 @@ os-version = "0.2"
 hound = "3.5"
 
 [package.metadata.bundle]
-name = "HopToDesk"
-identifier = "com.hoptodesk.hoptodesk"
+name = "YedikareRemote"
+identifier = "com.yedikare.remote"
 icon = ["res/mac-32x32.png", "res/mac-128x128.png", "res/mac-128x128@2x.png"]
 deb_depends = ["libgtk-3-0", "libxcb-randr0", "libxdo3", "libxfixes3", "libxcb-shape0", "libxcb-xfixes0", "libasound2", "libsystemd0", "curl", "libva-drm2", "libva-x11-2", "libvdpau1", "libgstreamer-plugins-base1.0-0", "libpam0g"]
 osx_minimum_system_version = "10.14"

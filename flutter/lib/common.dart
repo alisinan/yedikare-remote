@@ -227,16 +227,16 @@ class MyTheme {
   static const Color white = Color(0xFFFFFFFF);
   static const Color headerGray = Color(0xFF393E46);
   static const Color lightBlue = Color(0xB2DFFA);
-  static const Color accent = Color(0xFF0071FF);
-  static const Color accent50 = Color(0x770071FF);
-  static const Color accent80 = Color(0xAA0071FF);
+  static const Color accent = Color(0xFF0090D7);
+  static const Color accent50 = Color(0x770090D7);
+  static const Color accent80 = Color(0xAA0090D7);
   static const Color canvasColor = Color(0xFF212121);
   static const Color border = Color(0xFFCCCCCC);
-  static const Color idColor = Color(0xFF00B6F0);
+  static const Color idColor = Color(0xFF0090D7);
   static const Color darkGray = Color(0xFFB9BABC);
   static const Color cmIdColor = Color(0xFF21790B);
   static const Color dark = Colors.black87;
-  static const Color button = Color(0xFF2C8CFF);
+  static const Color button = Color(0xFF0090D7);
   static const Color hoverBorder = Color(0xFF999999);
   static const Color bordDark = Colors.white24;
   static const Color bordLight = Colors.black26;
@@ -429,7 +429,7 @@ class MyTheme {
         style:
             MenuStyle(backgroundColor: MaterialStatePropertyAll(Colors.white))),
     colorScheme: ColorScheme.light(
-        primary: Colors.blue, secondary: accent, background: grayBg),
+        primary: accent, secondary: accent, background: grayBg),
     popupMenuTheme: PopupMenuThemeData(
         color: Colors.white,
         shape: RoundedRectangleBorder(
@@ -1222,7 +1222,7 @@ Color? _msgboxColor(String type) {
   if (type.contains("error") || type == "re-input-password") {
     return Color(0xFFE04F5F);
   }
-  return Color(0xFF2C8CFF);
+  return Color(0xFF0090D7);
 }
 
 Widget msgboxIcon(String type) {
@@ -3406,12 +3406,12 @@ Widget loadPowered(BuildContext context) {
     cursor: SystemMouseCursors.click,
     child: GestureDetector(
       onTap: () {
-        launchUrl(Uri.parse('https://rustdesk.com'));
+        launchUrl(Uri.parse('https://www.yedikare.com.tr'));
       },
       child: Opacity(
           opacity: 0.5,
           child: Text(
-            translate("powered_by_me"),
+            'www.yedikare.com.tr',
             overflow: TextOverflow.clip,
             style: Theme.of(context)
                 .textTheme

@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "HopToDesk" "\0"
-            VALUE "FileDescription", "hoptodesk" "\0"
+            VALUE "CompanyName", "Yedikare" "\0"
+            VALUE "FileDescription", "Yedikare Remote" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "hoptodesk" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2022 HopToDesk. All rights reserved." "\0"
-            VALUE "OriginalFilename", "hoptodesk.exe" "\0"
-            VALUE "ProductName", "hoptodesk" "\0"
+            VALUE "InternalName", "YedikareRemote" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 Yedikare. Based on HopToDesk, Copyright (C) HopToDesk." "\0"
+            VALUE "OriginalFilename", "YedikareRemote.exe" "\0"
+            VALUE "ProductName", "Yedikare Remote" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -1908,7 +1908,7 @@ class _AboutState extends State<_About> {
       final scrollController = ScrollController();
       return SingleChildScrollView(
         controller: scrollController,
-        child: _Card(title: translate('About RustDesk'), children: [
+        child: _Card(title: '${translate('About')} Yedikare Remote', children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -1927,7 +1927,8 @@ class _AboutState extends State<_About> {
                           .marginSymmetric(vertical: 4.0)),
                   InkWell(
                       onTap: () {
-                        launchUrlString('https://rustdesk.com/privacy.html');
+                        launchUrlString(
+                            'https://www.yedikare.com.tr/gizlilik-politikasi');
                       },
                       child: Text(
                         translate('Privacy Statement'),
@@ -1935,14 +1936,14 @@ class _AboutState extends State<_About> {
                       ).marginSymmetric(vertical: 4.0)),
                   InkWell(
                       onTap: () {
-                        launchUrlString('https://rustdesk.com');
+                        launchUrlString('https://www.yedikare.com.tr');
                       },
                       child: Text(
                         translate('Website'),
                         style: linkStyle,
                       ).marginSymmetric(vertical: 4.0)),
                   Container(
-                    decoration: const BoxDecoration(color: Color(0xFF2c8cff)),
+                    decoration: const BoxDecoration(color: Color(0xFF0090D7)),
                     padding:
                         const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
                     child: SelectionArea(
@@ -1953,7 +1954,7 @@ class _AboutState extends State<_About> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Copyright © ${DateTime.now().toString().substring(0, 4)} Purslane Ltd.\n$license',
+                                'Copyright © ${DateTime.now().toString().substring(0, 4)} Yedikare\nBased on HopToDesk © Purslane Ltd.\n$license',
                                 style: const TextStyle(color: Colors.white),
                               ),
                               Text(

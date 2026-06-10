@@ -35,7 +35,7 @@ class SettingsPage extends StatefulWidget implements PageShape {
   State<SettingsPage> createState() => _SettingsState();
 }
 
-const url = 'https://www.hoptodesk.com/';
+const url = 'https://www.yedikare.com.tr/';
 
 enum KeepScreenOn {
   never,
@@ -843,7 +843,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
                 title: Text(translate("Version: ") + version),
                 value: isIOS ? null : Padding(
                   padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Text('hoptodesk.com',
+                  child: Text('yedikare.com.tr',
                       style: TextStyle(
                         decoration: TextDecoration.underline,
                       )),
@@ -983,20 +983,20 @@ void showThemeSettings(OverlayDialogManager dialogManager) async {
 void showAbout(OverlayDialogManager dialogManager) {
   dialogManager.show((setState, close, context) {
     return CustomAlertDialog(
-      title: Text('${translate('About')} HopToDesk'),
+      title: Text('${translate('About')} Yedikare Remote'),
       content: Wrap(direction: Axis.vertical, spacing: 12, children: [
         Text('Version: $version'),
         if (!isIOS)
         InkWell(
               onTap: () async {
-                const url = 'https://www.hoptodesk.com/';
+                const url = 'https://www.yedikare.com.tr/';
                 if (await canLaunchUrl(Uri.parse(url))) {
                   await launchUrl(Uri.parse(url));
                 }
               },
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 8),
-                child: Text('hoptodesk.com',
+                child: Text('yedikare.com.tr',
                     style: TextStyle(
                       decoration: TextDecoration.underline,
                     )),

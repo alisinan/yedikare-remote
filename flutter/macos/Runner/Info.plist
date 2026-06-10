@@ -26,7 +26,7 @@
 			<key>CFBundleURLIconFile</key>
 			<string></string>
 			<key>CFBundleURLName</key>
-			<string>com.hoptodesk.app</string>
+			<string>com.yedikare.remote</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>hoptodesk</string>
