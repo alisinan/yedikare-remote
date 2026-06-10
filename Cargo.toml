@@ -1,0 +1,252 @@
+[package]
+name = "hoptodesk"
+version = "1.46.1"
+authors = ["hoptodesk <info@hoptodesk.com>"]
+edition = "2021"
+build= "build.rs"
+description = "A remote control software."
+default-run = "hoptodesk"
+rust-version = "1.75"
+
+[lib]
+name = "libhoptodesk"
+crate-type = ["cdylib", "staticlib", "rlib"]
+
+
+[features]
+inline = []
+packui = []
+standalone = []
+cli = []
+appimage = []
+use_samplerate = ["samplerate"]
+use_rubato = ["rubato"]
+use_dasp = ["dasp"]
+flutter = ["flutter_rust_bridge"]
+default = ["use_dasp"]
+hwcodec = ["scrap/hwcodec"]
+vram = []
+mediacodec = []
+plugin_framework = []
+linux-pkg-config = ["magnum-opus/linux-pkg-config", "scrap/linux-pkg-config"]
+unix-file-copy-paste = []
+screencapturekit = ["cpal/screencapturekit"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+async-trait = "0.1"
+scrap = { path = "libs/scrap", features = ["wayland"] }
+hbb_common = { path = "libs/hbb_common" }
+serde_derive = "1.0"
+serde = "1.0"
+serde_json = { version = "1.0", features = ["preserve_order"] }
+serde_repr = "0.1"
+cfg-if = "1.0"
+lazy_static = "1.4"
+sha2 = "0.10"
+repng = "0.2"
+parity-tokio-ipc = { git = "https://github.com/rustdesk-org/parity-tokio-ipc" }
+magnum-opus = { path = "libs/magnum-opus" }
+dasp = { version = "0.11", features = ["signal", "interpolate-linear", "interpolate"], optional = true }
+rubato = { version = "0.12", optional = true }
+samplerate = { version = "0.2", optional = true }
+uuid = { version = "1.3", features = ["v4"] }
+clap = "4.2"
+rpassword = "7.2"
+num_cpus = "1.15"
+bytes = { version = "1.4", features = ["serde"] }
+default-net = "0.14"
+wol-rs = "1.0"
+flutter_rust_bridge = { version = "=1.80", features = ["uuid"], optional = true}
+errno = "0.3"
+rdev = { git = "https://github.com/rustdesk-org/rdev" }
+url = { version = "=2.4.0", features = ["serde"] }
+crossbeam-queue = "0.3"
+hex = "0.4.3"
+chrono = "0.4.41"
+cidr-utils = "0.5"
+soketto = "0.7"
+turn = { path = "libs/turn" }
+tokio-rustls = "0.24"
+webpki-roots = "0.26.7"
+webrtc-util = "0.7"
+futures = "0.3"
+fon = "0.6"
+shutdown_hooks = "0.1"
+totp-rs = { version = "5.4", default-features = false, features = ["gen_secret", "otpauth"] }
+tokio-socks = { git = "https://github.com/rustdesk-org/tokio-socks" }
+ringbuf = "0.3"
+open = "5.0"
+
+
+[target.'cfg(not(target_os = "linux"))'.dependencies]
+cpal = { git = "https://github.com/rustdesk-org/cpal", branch = "osx-screencapturekit" }
+tokio-tungstenite = { version = "^0.21.0", features = ["native-tls"] }
+native-tls = { version = "=0.2.11", features = ["alpn"] }
+
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+mac_address = "1.1"
+sciter-rs = { git = "https://github.com/open-trade/rust-sciter", branch = "dyn" }
+sys-locale = "0.3"
+enigo = { path = "libs/enigo", features = [ "with_serde" ] }
+clipboard = { path = "libs/clipboard" }
+ctrlc = "3.2"
+# arboard = { version = "3.4", features = ["wayland-data-control"] }
+arboard = { git = "https://github.com/rustdesk-org/arboard", features = ["wayland-data-control"] }
+clipboard-master = { git = "https://github.com/rustdesk-org/clipboard-master" }
+system_shutdown = "4.0"
+qrcode-generator = "4.1"
+portable-pty = "0.8"
+vt100 = "0.15"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+winapi = { version = "0.3", features = [
+	"winuser",
+	"dwmapi",
+    "wincrypt",
+    "devguid",
+    "setupapi",
+    "cguid",
+    "ioapiset",
+    "tlhelp32",
+	"shellapi",
+	"minwinbase",
+	"securitybaseapi",
+	"ole2",
+	"wincon",
+	"processenv",
+	"fileapi"] }
+windows = { version = "0.61.1", features = [
+    "Win32",
+    "Win32_System",
+    "Win32_System_Diagnostics",
+    "Win32_System_Threading",
+    "Win32_System_Diagnostics_ToolHelp",
+    "Win32_Graphics_Gdi",
+    "Win32_System_WinRT",
+    "Win32_Foundation",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_UI_Input_Touch",
+    "Win32_UI_Input",
+    "Win32_Devices_HumanInterfaceDevice",
+] }
+winreg = "0.50"
+windows-service = "0.6"
+virtual_display = { path = "libs/virtual_display" }
+impersonate_system = { git = "https://github.com/rustdesk-org/impersonate-system" }
+shared_memory = "0.12"
+nt_version = "0.1.3"
+runas = "1.2"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+objc = "0.2"
+cocoa = "0.24"
+dispatch = "0.2"
+core-foundation = "0.9"
+core-graphics = "0.22"
+include_dir = "0.7"
+time = "0.2.23"
+fruitbasket = "0.10"
+objc_id = "0.1"
+piet = "0.6"
+piet-coregraphics = "0.6"
+foreign-types = "0.3"
+block = "0.1"
+
+[target.'cfg(any(target_os = "macos", target_os = "linux", target_os = "windows"))'.dependencies]
+tray-icon = { git = "https://github.com/tauri-apps/tray-icon" }
+tao = { git = "https://github.com/rustdesk-org/tao", branch = "dev" }
+image = "=0.24.7"
+
+[target.'cfg(any(target_os = "windows", target_os = "linux"))'.dependencies]
+wallpaper = { git = "https://github.com/rustdesk-org/wallpaper.rs" }
+tiny-skia = "0.11"
+softbuffer = "0.4"
+fontdb = "0.23"
+bytemuck = "1.23"
+ttf-parser = "0.25"
+
+[target.'cfg(any(target_os = "macos", target_os = "windows"))'.dependencies]
+# https://github.com/rustdesk/rustdesk-server-pro/issues/189, using native-tls for better tls support
+reqwest = { git = "https://github.com/rustdesk-org/reqwest", features = ["blocking", "socks", "json", "native-tls", "gzip", "multipart"], default-features=false }
+
+[target.'cfg(not(any(target_os = "macos", target_os = "windows")))'.dependencies]
+reqwest = { git = "https://github.com/rustdesk-org/reqwest", features = ["blocking", "socks", "json", "rustls-tls", "rustls-tls-native-roots", "gzip", "multipart"], default-features=false }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+libxdo-sys = "0.11"
+psimple = { package = "libpulse-simple-binding", version = "2.27" }
+pulse = { package = "libpulse-binding", version = "2.27" }
+rust-pulsectl = { git = "https://github.com/rustdesk-org/pulsectl" }
+async-process = "1.7"
+evdev = { git="https://github.com/rustdesk-org/evdev" }
+dbus = "0.9"
+dbus-crossroads = "0.5"
+pam = { git="https://github.com/rustdesk-org/pam" }
+xrandr-parser = "0.3.0"
+tokio-tungstenite = { version = "^0.21.0", features = ["native-tls-vendored"] }
+native-tls = { version = "0.2.10", features = ["vendored", "alpn"] }
+users = { version = "0.11" }
+x11-clipboard = {git="https://github.com/clslaid/x11-clipboard", branch = "feat/store-batch", optional = true}
+keepawake = { git = "https://github.com/rustdesk-org/keepawake-rs" }
+nix = { version = "0.29", features = ["term", "process"]}
+gtk = "0.18"
+termios = "0.3"
+terminfo = "0.8"
+winit = "0.30"
+
+[target.'cfg(target_os = "android")'.dependencies]
+android_logger = "0.13"
+jni = "0.21"
+android-wakelock = { git = "https://github.com/rustdesk-org/android-wakelock" }
+openssl = { version = "0.10.66", features = ["vendored"] }
+
+[workspace]
+members = ["libs/scrap", "libs/hbb_common", "libs/enigo", "libs/clipboard", "libs/virtual_display", "libs/stun", "libs/turn", "libs/magnum-opus", "libs/privacyhelper"]
+exclude = ["vdi/host", "examples/custom_plugin"]
+
+[patch.crates-io]
+libxdo-sys = { path = "libs/libxdo-sys-stub" }
+stun = { path = "libs/stun" }
+
+[package.metadata.winres]
+LegalCopyright = "Copyright © 2026 Begonia Holdings.  Copyright © 2026 Purslane Ltd."
+ProductName = "HopToDesk"
+FileDescription = "HopToDesk"
+CompanyName = "Begonia Holdings"
+
+[target.'cfg(target_os="windows")'.build-dependencies]
+winres = "0.1"
+winapi = { version = "0.3", features = [ "winnt", "pdh", "synchapi" ] }
+#static_vcruntime = "2.0"
+
+[build-dependencies]
+cc = "1.0"
+hbb_common = { path = "libs/hbb_common" }
+os-version = "0.2"
+
+[dev-dependencies]
+hound = "3.5"
+
+[package.metadata.bundle]
+name = "HopToDesk"
+identifier = "com.hoptodesk.hoptodesk"
+icon = ["res/mac-32x32.png", "res/mac-128x128.png", "res/mac-128x128@2x.png"]
+deb_depends = ["libgtk-3-0", "libxcb-randr0", "libxdo3", "libxfixes3", "libxcb-shape0", "libxcb-xfixes0", "libasound2", "libsystemd0", "curl", "libva-drm2", "libva-x11-2", "libvdpau1", "libgstreamer-plugins-base1.0-0", "libpam0g"]
+osx_minimum_system_version = "10.14"
+resources = ["res/mac-tray.png"]
+
+[profile.dev]
+debug = false
+incremental = false
+
+
+#https://github.com/johnthagen/min-sized-rust
+[profile.release]
+lto = true
+codegen-units = 1
+panic = 'abort'
+strip = true
+opt-level = 'z' # only have smaller size after strip
+rpath = true

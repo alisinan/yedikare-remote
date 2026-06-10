@@ -1,0 +1,401 @@
+var terminal_opened = false;
+var terminal_id = 0;
+
+var scrollback_view = 0;
+var scrollback_view_dispatched = 0;
+var scrollback_timer_pending = false;
+const SCROLLBACK_MAX = 500;
+
+var term_rows = 24;
+var term_cols = 80;
+var term_char_w = 7.8;
+var term_char_h = 18;
+var term_app_cursor = false;
+var term_app_keypad = false;
+var term_alt_screen = false;
+var term_bracketed_paste = false;
+var term_cursor_visible = true;
+
+function applyTerminalUpdate(update) {
+    if (update == null) return;
+    term_app_cursor      = update["app_cur"];
+    term_app_keypad      = update["app_kp"];
+    term_alt_screen      = update["alt"];
+    term_bracketed_paste = update["bracketed"];
+    term_cursor_visible  = update["cur_vis"];
+    if (term_row_elements == null || term_row_elements.length != term_rows) {
+        buildGrid(term_rows);
+    }
+    var payload = update["payload"];
+    if (payload == null) return;
+    var rows = [];
+    try { rows = JSON.parse(payload); } catch (e) { return; }
+    for (var i = 0; i < rows.length; i++) {
+        var entry = rows[i];
+        if (entry.r >= 0 && entry.r < term_row_elements.length) {
+            var h = entry.h;
+            if (h == null || h.length == 0) h = "&nbsp;";
+            term_row_elements[entry.r].html = h;
+        }
+    }
+}
+
+function repaintCurrentScreen() {
+    if (!terminal_opened) return;
+    scrollback_view = 0;
+    scrollback_view_dispatched = 0;
+    var update = handler.view_terminal_scrollback(terminal_id, 0);
+    applyTerminalUpdate(update);
+}
+
+function scheduleScrollbackUpdate() {
+    if (scrollback_timer_pending) return;
+    scrollback_timer_pending = true;
+    self.timer(50ms, function() {
+        scrollback_timer_pending = false;
+        if (scrollback_view != scrollback_view_dispatched) {
+            scrollback_view_dispatched = scrollback_view;
+            var update = handler.view_terminal_scrollback(terminal_id, scrollback_view);
+            applyTerminalUpdate(update);
+        }
+        return false;
+    });
+}
+
+class TerminalView: Reactor.Component {
+    this var status = "Connecting...";
+    this var connected = false;
+
+    function render() {
+        return <div id="terminal-container">
+            <div id="terminal-viewport" tabindex="0">
+                <div id="terminal-grid"></div>
+            </div>
+            <div id="terminal-statusbar">
+                <span .status-text>{this.status}</span>
+                <button .disconnect-btn>
+                    {translate("Disconnect")}
+                </button>
+            </div>
+        </div>;
+    }
+
+    function attached() {
+        var vp = this.$(#terminal-viewport);
+        if (vp) {
+            vp.state.focus = true;
+        }
+    }
+
+    event click $(button.disconnect-btn) {
+        if (terminal_opened) {
+            handler.send_terminal_close(terminal_id);
+        }
+        view.close();
+    }
+
+    event contextmenu (evt) {
+        if (terminal_opened) {
+            var ptext = view.clipboard(#get, #text);
+            if (ptext && ptext.length > 0) {
+                if (term_bracketed_paste) {
+                    ptext = "\x1b[200~" + ptext + "\x1b[201~";
+                }
+                handler.send_terminal_input(terminal_id, ptext);
+            }
+        }
+        return true;
+    }
+
+    event mousewheel (evt) {
+        if (!terminal_opened) return false;
+        var dy = 0;
+        if (evt.wheelDeltas != null) {
+            var (dx_, dy_) = evt.wheelDeltas;
+            dy = dy_;
+        } else if (evt.wheelDelta != null) {
+            dy = evt.wheelDelta;
+        }
+        var step = (dy > 0) ? 3 : ((dy < 0) ? -3 : 0);
+        if (step == 0) return false;
+        scrollback_view += step;
+        if (scrollback_view < 0) scrollback_view = 0;
+        if (scrollback_view > SCROLLBACK_MAX) scrollback_view = SCROLLBACK_MAX;
+        scheduleScrollbackUpdate();
+        return true;
+    }
+
+    event keydown (evt) {
+        if (!terminal_opened) return false;
+
+        if (scrollback_view > 0) {
+            scrollback_view = 0;
+            scrollback_view_dispatched = 0;
+            var update = handler.view_terminal_scrollback(terminal_id, 0);
+            applyTerminalUpdate(update);
+        }
+
+        var data = "";
+
+        if (evt.ctrlKey && evt.shiftKey) {
+            if (evt.keyCode == 0x43) { // Ctrl+Shift+C
+                var vp = this.$(#terminal-viewport);
+                if (vp) {
+                    var sel = vp.selection ? vp.selection.text : "";
+                    if (sel && sel.length > 0) {
+                        view.clipboard(#put, sel);
+                    }
+                }
+                return true;
+            }
+            if (evt.keyCode == 0x56) { // Ctrl+Shift+V
+                var text = view.clipboard(#get, #text);
+                if (text && text.length > 0) {
+                    if (term_bracketed_paste) {
+                        text = "\x1b[200~" + text + "\x1b[201~";
+                    }
+                    handler.send_terminal_input(terminal_id, text);
+                }
+                return true;
+            }
+        }
+
+        if (evt.ctrlKey) {
+            var code = evt.keyCode;
+            if (code == 0x56) { // Ctrl+V — paste
+                var ptext = view.clipboard(#get, #text);
+                if (ptext && ptext.length > 0) {
+                    if (term_bracketed_paste) {
+                        ptext = "\x1b[200~" + ptext + "\x1b[201~";
+                    }
+                    handler.send_terminal_input(terminal_id, ptext);
+                }
+                return true;
+            }
+            if (code >= 0x41 && code <= 0x5A) {
+                data = String.fromCharCode(code - 0x40);
+            }
+        } else if (evt.altKey) {
+            var code = evt.keyCode;
+            if (code >= 0x41 && code <= 0x5A) {
+                data = "\x1b" + String.fromCharCode(code + 0x20);
+            } else if (code >= 0x30 && code <= 0x39) {
+                data = "\x1b" + String.fromCharCode(code);
+            }
+        } else {
+            var ck_lead = term_app_cursor ? "\x1bO" : "\x1b[";
+            switch (evt.keyCode) {
+                case Event.VK_RETURN: data = "\r"; break;
+                case Event.VK_BACK: data = "\x7f"; break;
+                case Event.VK_TAB: data = "\t"; break;
+                case Event.VK_ESCAPE: data = "\x1b"; break;
+                case Event.VK_UP: data = ck_lead + "A"; break;
+                case Event.VK_DOWN: data = ck_lead + "B"; break;
+                case Event.VK_RIGHT: data = ck_lead + "C"; break;
+                case Event.VK_LEFT: data = ck_lead + "D"; break;
+                case Event.VK_HOME: data = ck_lead + "H"; break;
+                case Event.VK_END: data = ck_lead + "F"; break;
+                case Event.VK_DELETE: data = "\x1b[3~"; break;
+                case Event.VK_PRIOR: data = "\x1b[5~"; break;
+                case Event.VK_NEXT: data = "\x1b[6~"; break;
+                case Event.VK_F1: data = "\x1bOP"; break;
+                case Event.VK_F2: data = "\x1bOQ"; break;
+                case Event.VK_F3: data = "\x1bOR"; break;
+                case Event.VK_F4: data = "\x1bOS"; break;
+                case Event.VK_F5: data = "\x1b[15~"; break;
+                case Event.VK_F6: data = "\x1b[17~"; break;
+                case Event.VK_F7: data = "\x1b[18~"; break;
+                case Event.VK_F8: data = "\x1b[19~"; break;
+                case Event.VK_F9: data = "\x1b[20~"; break;
+                case Event.VK_F10: data = "\x1b[21~"; break;
+                case Event.VK_F11: data = "\x1b[23~"; break;
+                case Event.VK_F12: data = "\x1b[24~"; break;
+            }
+        }
+
+        if (data.length > 0) {
+            handler.send_terminal_input(terminal_id, data);
+            return true;
+        }
+        return false;
+    }
+
+    event keypress (evt) {
+        if (!terminal_opened) return false;
+        if (evt.keyCode && !evt.ctrlKey && !evt.altKey) {
+            var ch = String.fromCharCode(evt.keyCode);
+            if (ch.length > 0) {
+                handler.send_terminal_input(terminal_id, ch);
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+var last_terminal_cols = 0;
+var last_terminal_rows = 0;
+
+function calculateTerminalSize() {
+    var vp = $(#terminal-viewport);
+    if (!vp) return { rows: 24, cols: 80 };
+    var w = vp.box(#width, #client);
+    var h = vp.box(#height, #client);
+    var cols = Math.floor(w / term_char_w);
+    if (cols < 10) cols = 10;
+    var rows = Math.floor(h / term_char_h);
+    if (rows < 5) rows = 5;
+    return { rows: rows.toInteger(), cols: cols.toInteger() };
+}
+
+var term_row_elements = [];
+var pending_html = null;
+var pending_flush_scheduled = false;
+
+function buildGrid(rows) {
+    var grid = $(#terminal-grid);
+    if (!grid) return;
+    var html = "";
+    for (var r = 0; r < rows; r++) {
+        html += "<div class=\"term-row\">&nbsp;</div>";
+    }
+    grid.html = html;
+    term_row_elements = grid.$$(>.term-row);
+}
+
+function flushPendingRows() {
+    pending_flush_scheduled = false;
+    if (pending_html == null) return;
+    for (var r = 0; r < pending_html.length; r++) {
+        var h = pending_html[r];
+        if (h != null && r < term_row_elements.length) {
+            term_row_elements[r].html = h;
+            pending_html[r] = null;
+        }
+    }
+}
+
+function initializeTerminal() {
+    terminal_opened = false;
+    terminal_id = 0;
+    term_app_cursor = false;
+    term_app_keypad = false;
+    term_alt_screen = false;
+    term_bracketed_paste = false;
+    term_cursor_visible = true;
+    scrollback_view = 0;
+    scrollback_view_dispatched = 0;
+    $(#file-transfer-wrapper).content(<TerminalView />);
+    $(#video-wrapper).style.set { visibility: "hidden", position: "absolute" };
+    $(#file-transfer-wrapper).style.set { display: "block" };
+    self.timer(50ms, function() {
+        var size = calculateTerminalSize();
+        term_rows = size.rows;
+        term_cols = size.cols;
+        last_terminal_cols = size.cols;
+        last_terminal_rows = size.rows;
+        buildGrid(term_rows);
+        handler.send_terminal_open(terminal_id, size.rows, size.cols);
+    });
+    view.on("size", function() {
+        if (!terminal_opened) return;
+        self.timer(100ms, function() {
+            var size = calculateTerminalSize();
+            if (size.cols != last_terminal_cols || size.rows != last_terminal_rows) {
+                last_terminal_cols = size.cols;
+                last_terminal_rows = size.rows;
+                term_rows = size.rows;
+                term_cols = size.cols;
+                buildGrid(term_rows);
+                handler.send_terminal_resize(terminal_id, size.rows, size.cols);
+                repaintCurrentScreen();
+            }
+        });
+    });
+}
+
+handler.terminalOpened = function(id, success, message) {
+    terminal_id = id;
+    if (success) {
+        terminal_opened = true;
+        var tv = $(TerminalView);
+        if (tv) {
+            tv.status = "Connected";
+            tv.connected = true;
+            tv.update();
+        }
+        var vp = $(#terminal-viewport);
+        if (vp) vp.state.focus = true;
+        // Resize the PTY to the actual viewport dimensions. The Rust side
+        // auto-opens with a hardcoded 24x80 on connect; the resize we sent
+        // from the init timer raced the sender channel and was dropped.
+        // Resending it after TerminalOpened reaches us guarantees the PTY
+        // matches the visible viewport so top/vim fill the whole window.
+        var size = calculateTerminalSize();
+        last_terminal_cols = size.cols;
+        last_terminal_rows = size.rows;
+        term_rows = size.rows;
+        term_cols = size.cols;
+        buildGrid(term_rows);
+        handler.send_terminal_resize(id, size.rows, size.cols);
+        repaintCurrentScreen();
+    } else {
+        var tv = $(TerminalView);
+        if (tv) {
+            tv.status = "Error: " + message;
+            tv.update();
+        }
+    }
+};
+
+handler.terminalUpdate = function(id, payload, cur_row, cur_col, cur_vis, app_cur, app_kp, alt, bracketed, full, title) {
+    term_app_cursor = app_cur;
+    term_app_keypad = app_kp;
+    term_alt_screen = alt;
+    term_bracketed_paste = bracketed;
+    term_cursor_visible = cur_vis;
+
+    if (term_row_elements == null || term_row_elements.length != term_rows) {
+        buildGrid(term_rows);
+    }
+
+    if (scrollback_view > 0 && !full) {
+        return;
+    }
+
+    var rows = [];
+    try {
+        rows = JSON.parse(payload);
+    } catch (e) {
+        return;
+    }
+    if (pending_html == null || pending_html.length != term_rows) {
+        pending_html = [];
+        for (var k = 0; k < term_rows; k++) pending_html.push(null);
+    }
+    for (var i = 0; i < rows.length; i++) {
+        var entry = rows[i];
+        if (entry.r >= 0 && entry.r < term_row_elements.length) {
+            var h = entry.h;
+            if (h == null || h.length == 0) h = "&nbsp;";
+            pending_html[entry.r] = h;
+        }
+    }
+    if (!pending_flush_scheduled) {
+        pending_flush_scheduled = true;
+        self.timer(16ms, flushPendingRows);
+    }
+};
+
+handler.terminalClosed = function(id, exit_code) {
+    terminal_opened = false;
+    view.close();
+};
+
+handler.terminalError = function(id, message) {
+    var tv = $(TerminalView);
+    if (tv) {
+        tv.status = "Error: " + message;
+        tv.update();
+    }
+};
