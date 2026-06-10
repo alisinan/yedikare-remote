@@ -97,16 +97,20 @@ jobs:
         with:
           key: macos-arm64-sciter
 
+      - name: Setup vcpkg
+        run: |
+          git clone --depth 1 https://github.com/microsoft/vcpkg "$HOME/vcpkg"
+          "$HOME/vcpkg/bootstrap-vcpkg.sh" -disableMetrics
+          echo "VCPKG_ROOT=$HOME/vcpkg" >> "$GITHUB_ENV"
+
       - name: Cache vcpkg packages
         uses: actions/cache@v4
         with:
-          path: ${{ env.VCPKG_INSTALLATION_ROOT }}/installed
+          path: ~/vcpkg/installed
           key: vcpkg-macos-arm64-vpx-yuv-opus-v1
 
       - name: Install vcpkg dependencies
-        run: vcpkg install libvpx:arm64-osx libyuv:arm64-osx opus:arm64-osx
-        env:
-          VCPKG_ROOT: ${{ env.VCPKG_INSTALLATION_ROOT }}
+        run: "$VCPKG_ROOT/vcpkg" install libvpx:arm64-osx libyuv:arm64-osx opus:arm64-osx
 
       - name: Download sciter packfolder
         run: |
@@ -116,8 +120,6 @@ jobs:
 
       - name: Build (sciter UI, packui)
         run: cargo build --release --features packui
-        env:
-          VCPKG_ROOT: ${{ env.VCPKG_INSTALLATION_ROOT }}
 
       - name: Assemble .app and DMG
         run: |
