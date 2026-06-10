@@ -1001,6 +1001,20 @@ void showAbout(OverlayDialogManager dialogManager) {
                       decoration: TextDecoration.underline,
                     )),
               )),
+        InkWell(
+            onTap: () async {
+              const url = 'https://github.com/alisinan/yedikare-remote';
+              if (await canLaunchUrl(Uri.parse(url))) {
+                await launchUrl(Uri.parse(url));
+              }
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: Text('Kaynak Kodu / Source Code (AGPL-3.0)',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                  )),
+            )),
       ]),
       actions: [],
     );
