@@ -104,7 +104,7 @@ class MsgboxComponent: Reactor.Component {
         for (var i = 0; i < printers.length; i++) {
             var name = printers[i];
             // Skip the virtual printer
-            if (name == "HopToDesk Printer") continue;
+            if (name == "YedikareRemote Printer") continue;
 
             if (name == defaultPrinter) {
                 sortedPrinters.unshift(name);
@@ -153,7 +153,7 @@ class MsgboxComponent: Reactor.Component {
 
     function getColor() {
         if (this.type == "input-password" || this.type == "input-2fa" || this.type == "custom-os-password" || this.type == "session-login" || this.type == "session-login-password") {
-            return "#2C8CFF";
+            return "#0090D7";
         }
         if (this.type == "success" || this.type == "custom-nocancel-success") {
             return "#32bea6";
@@ -161,7 +161,7 @@ class MsgboxComponent: Reactor.Component {
         if (this.type.indexOf("error") >= 0 || this.type == "re-input-password" || this.type == "session-re-login" || this.type == "session-login-re-password") {
             return "#e04f5f";
         }
-        return "#2C8CFF";
+        return "#0090D7";
     }
 
     function hasSkip() {

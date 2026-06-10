@@ -110,7 +110,7 @@ table.has_current tbody tr:checked td {
 
 /* Drag-and-drop drop target feedback */
 table[drag-over] {
-  border: 2px dashed #2C8CFF;
+  border: 2px dashed #0090D7;
 }
 
 table[drag-over] > tbody {

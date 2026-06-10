@@ -92,7 +92,7 @@ function getTime() {
 
 function platformSvg(platform, color) {
     platform = (platform || "").toLowerCase();
-	//#2C8CFF
+	//#0090D7
     if (platform == "linux" || platform == "freebsd") {
         return <svg viewBox="0 0 256 256">
                     <g transform="translate(0 256) scale(.1 -.1)" fill="#FFFFFF">

@@ -56,7 +56,7 @@ svg#settings-gear {
 
 svg#settings-gear:hover, svg#settings-gear:focus {
     color: #1E3A5F;
-    outline: 1px solid #2C8CFF;
+    outline: 1px solid #0090D7;
     outline-offset: 2px;
     border-radius: 4px;
 }
@@ -136,7 +136,7 @@ svg#settings-gear:hover, svg#settings-gear:focus {
 
 .copy-pill:hover, .copy-pill:focus {
     background: #BBDEFB;
-    outline: 1px solid #2C8CFF;
+    outline: 1px solid #0090D7;
 }
 
 .copy-pill svg {
@@ -155,19 +155,19 @@ svg#settings-gear:hover, svg#settings-gear:focus {
     padding: 3px 12px 3px 9px;
     cursor: pointer;
     font-size: 0.65em;
-    color: #2C8CFF;
+    color: #0090D7;
     font-weight: 700;
 }
 
 .invite-pill:hover, .invite-pill:focus {
     background: #D0E3FF;
-    outline: 1px solid #2C8CFF;
+    outline: 1px solid #0090D7;
 }
 
 .invite-pill svg {
     width: 12px;
     height: 12px;
-    color: #2C8CFF;
+    color: #0090D7;
     vertical-align: middle;
 }
 
@@ -598,7 +598,7 @@ svg#settings-gear:hover, svg#settings-gear:focus {
 }
 
 .toggle-switch input:checked + .toggle-slider {
-    background: #2C8CFF;
+    background: #0090D7;
 }
 
 .toggle-switch input:checked + .toggle-slider::after {
@@ -631,8 +631,8 @@ html.darktheme .toggle-switch input:checked + .toggle-slider {
 }
 
 .connect-buttons button#connect {
-    background: #2C8CFF;
-    border-color: #2C8CFF;
+    background: #0090D7;
+    border-color: #0090D7;
 }
 
 .connect-buttons button#connect:hover {
@@ -834,7 +834,7 @@ input {
 
 button#install-btn {
     font-family: 'opensans-semb';
-    background: #2C8CFF;
+    background: #0090D7;
     color: white;
     border: none;
     border-radius: 5px;
@@ -1276,7 +1276,7 @@ popup[role="tooltip"] {
 
 #ticket-icon:hover, #ticket-icon:focus {
     color: #0056b3;
-    outline: 1px solid #2C8CFF;
+    outline: 1px solid #0090D7;
     outline-offset: 2px;
     border-radius: 4px;
 }
@@ -1856,7 +1856,7 @@ li:disabled, li:disabled:hover {
 }
 
 #settings-panel .toggle-switch.toggle-on {
-    background: #2C8CFF;
+    background: #0090D7;
 }
 
 #settings-panel .toggle-switch.toggle-off {

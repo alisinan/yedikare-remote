@@ -54,7 +54,7 @@ class Install: Reactor.Component {
     }
 
     event click $(#privacypolicy) {
-        view.open_url("https://www.hoptodesk.com/privacy");
+        view.open_url("https://www.yedikare.com.tr/gizlilik-politikasi");
     }
 
     event click $(#submit) {

@@ -279,14 +279,14 @@ class MyIdMenu: Reactor.Component {
                 <div>TeamID: " + handler.get_teamid() + " \
             </div>
 			<div style='font-size: 13px; color: #000; text-decoration: none;'>
-				<div .link .custom-event url='https://www.hoptodesk.com'>Website</div> \
-				<div .link .custom-event url='https://www.hoptodesk.com/privacy'>Privacy Statement</div> \
+				<div .link .custom-event url='https://www.yedikare.com.tr'>Website</div> \
+				<div .link .custom-event url='https://www.yedikare.com.tr/gizlilik-politikasi'>Privacy Statement</div> \
 			<br><br>
 			<div .link .custom-event url='https://www.gnu.org/licenses/agpl-3.0.en.html'><span style='text-decoration: none'>This software is licensed under&nbsp;</span>AGPL 3.0</div> \
-			<div .link .custom-event url='https://gitlab.com/hoptodesk/hoptodesk/'><span style='text-decoration: none'>Source code is available&nbsp;</span>here</div><br>
+			<div .link .custom-event url='https://github.com/alisinan/yedikare-remote'><span style='text-decoration: none'>Source code is available&nbsp;</span>here</div><br>
 			</div><br>
 			<div style='font-size: 9px; color: #888; text-decoration: none;' .link .custom-event url='http://sciter.com/'>This Application (or Component) uses Sciter Engine, copyright Terra Informatica Software, Inc.</div>
-			<div style='font-size: 9px; color: #888; text-decoration: none;'>Copyright &copy; HopToDesk. Originally forked from RustDesk.</div>			\
+			<div style='font-size: 9px; color: #888; text-decoration: none;'>Copyright &copy; Yedikare. Based on HopToDesk, originally forked from RustDesk.</div>			\
 			", "", function(el) {
                 if (el && el.attributes) {
                     handler.open_url(el.attributes['url']);
@@ -530,7 +530,7 @@ class App: Reactor.Component
             <div .app style={isquicksupport ? "width:250px" : ""}>
                     <MyIdMenu />
                     <div .top-bar>
-                        <div .brand-name>HopToDesk</div>
+                        <div .brand-name>Yedikare Remote</div>
                         {!isquicksupport && !handler.is_installed() ? <button #install-btn title={translate('install_tip')}>{translate('Install')}</button> : ""}
                         {is_osx && !is_can_screen_recording ? <button .button #mac-enable-perms title={translate('Enable Permissions')}>{translate('Enable Permissions')}</button> : ""}
                         {is_osx && is_can_screen_recording && !handler.is_process_trusted(false) ? <button .button #mac-enable-perms-acc title={translate('Enable Permissions')}>{translate('Enable Permissions')}</button> : ""}
@@ -577,7 +577,7 @@ class App: Reactor.Component
 							<center><img .footer-featured src="" /></center>
                         </div>
                                                     
-                        <div #launch-update style="display:none" .update_available .link url='https://www.hoptodesk.com/'>{translate('New Update Available')}</div>
+                        <div #launch-update style="display:none" .update_available .link url="https://www.yedikare.com.tr/">{translate("New Update Available")}</div>
                         {!is_osx && !is_can_screen_recording ? <CanScreenRecording /> : ""}
                         {!is_osx && is_can_screen_recording && !handler.is_process_trusted(false) ? <TrustMe /> : ""}
                         {!service_stopped && is_can_screen_recording && handler.is_process_trusted(false) && handler.is_installed() && !handler.is_installed_daemon(false) ? <InstallDaemon /> : ""}
@@ -695,7 +695,7 @@ class App: Reactor.Component
             return handler.get_option(id) != "N";
         }
         function toggleClass(enabled) { return enabled ? "toggle-on" : "toggle-off"; }
-        function toggleBg(enabled) { return "background:" + (enabled ? "#2C8CFF" : "#CBD5E1") + ";width:36px;height:20px;border-radius:10px;position:relative;cursor:pointer;display:inline-block;"; }
+        function toggleBg(enabled) { return "background:" + (enabled ? "#0090D7" : "#CBD5E1") + ";width:36px;height:20px;border-radius:10px;position:relative;cursor:pointer;display:inline-block;"; }
         function knobStyle(enabled) { return "width:16px;height:16px;border-radius:50%;background:white;position:absolute;top:2px;left:" + (enabled ? "18px" : "2px") + ";box-shadow:0 1px 2px rgba(0,0,0,0.2);"; }
         var darkOn = handler.get_option("allow-darktheme") == "Y";
         var serviceOn = !service_stopped;
@@ -898,7 +898,7 @@ class App: Reactor.Component
     }
 
     event click $(#launch-update) {
-        handler.open_url("https://www.hoptodesk.com");
+        handler.open_url("https://www.yedikare.com.tr");
     }
 }
 
@@ -958,7 +958,7 @@ class UpdateMe: Reactor.Component {
     }
 
     event click $(#install-me) {
-        handler.open_url("https://www.hoptodesk.com");
+        handler.open_url("https://www.yedikare.com.tr");
         return;
     }
 }
@@ -1534,7 +1534,7 @@ function showLanguagePicker() {
     var cur = handler.get_local_option("lang") || "default";
     var html = "<div .form style='max-height: 300px; overflow-y: scroll-indicator;'>";
     for (var lang in langs) {
-        var selected = (lang[0] == cur) ? " style='font-weight:bold; color: #2C8CFF;'" : "";
+        var selected = (lang[0] == cur) ? " style='font-weight:bold; color: #0090D7;'" : "";
         html += "<div .custom-event lang-id='" + lang[0] + "'" + selected + " style='padding: 6px 10px; cursor:pointer;'>" + lang[1] + "</div>";
     }
     html += "</div>";
@@ -1557,7 +1557,7 @@ function showAudioInputPicker() {
     var cur = handler.get_option("audio-input") || curDefault;
     var html = "<div .form style='max-height: 300px; overflow-y: scroll-indicator;'>";
     for (var name in inputs) {
-        var selected = (name == cur) ? " style='font-weight:bold; color: #2C8CFF;'" : "";
+        var selected = (name == cur) ? " style='font-weight:bold; color: #0090D7;'" : "";
         html += "<div .custom-event audio-id='" + name + "'" + selected + " style='padding: 6px 10px; cursor:pointer;'>" + translate(name) + "</div>";
     }
     html += "</div>";

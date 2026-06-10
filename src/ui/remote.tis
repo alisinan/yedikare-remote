@@ -317,7 +317,7 @@ handler.applyZoomDelta = function(factor) {
     if (new_sy < 0) new_sy = 0;
     scroll_body.scrollTo(new_sx.toInteger(), new_sy.toInteger(), false);
 
-    try { view.windowCaption = "HopToDesk — Zoom " + Math.round(user_zoom_factor * 100).toInteger() + "%"; } catch (e) {}
+    try { view.windowCaption = "Yedikare Remote — Zoom " + Math.round(user_zoom_factor * 100).toInteger() + "%"; } catch (e) {}
     return user_zoom_factor;
 }
 

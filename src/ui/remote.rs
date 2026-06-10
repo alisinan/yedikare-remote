@@ -492,7 +492,7 @@ impl InvokeUiSession for SciterHandler {
                         self.msgbox(
                             "custom-error-nocancel-nook-hasclose",
                             "Keyboard Permission Required",
-                            "HopToDesk needs Input Monitoring permission for keyboard input. Please grant it in System Settings > Privacy & Security > Input Monitoring, then reconnect.",
+                            "Yedikare Remote needs Input Monitoring permission for keyboard input. Please grant it in System Settings > Privacy & Security > Input Monitoring, then reconnect.",
                             "",
                             false,
                         );
