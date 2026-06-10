@@ -110,7 +110,8 @@ jobs:
           key: vcpkg-macos-arm64-vpx-yuv-opus-v1
 
       - name: Install vcpkg dependencies
-        run: "$VCPKG_ROOT/vcpkg" install libvpx:arm64-osx libyuv:arm64-osx opus:arm64-osx
+        run: |
+          "$VCPKG_ROOT/vcpkg" install libvpx:arm64-osx libyuv:arm64-osx opus:arm64-osx
 
       - name: Download sciter packfolder
         run: |
