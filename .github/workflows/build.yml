@@ -1,5 +1,9 @@
 name: Build
 
+# HopToDesk masaüstü istemcisi Sciter UI kullanır (flutter yalnızca mobil içindir;
+# flutter masaüstü kodu upstream'de derlenmiyor). Bu yüzden masaüstü derlemesi
+# upstream ile aynı şekilde: cargo + packui (sciter UI arşivi) + sciter runtime.
+
 on:
   workflow_dispatch:
   push:
@@ -7,10 +11,8 @@ on:
       - "v*"
 
 env:
-  FLUTTER_VERSION: "3.24.5"
   RUST_VERSION: "1.75"
-  FRB_VERSION: "1.80.1"
-  LLVM_VERSION: "15.0.6"
+  SCITER_SDK_COMMIT: "9f1724a45f5a53c4d513b02ed01cdbdab08fa0e5"
 
 jobs:
   windows-x64:
@@ -21,28 +23,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-
-      - name: Install LLVM (libclang for ffigen)
-        uses: KyleMayes/install-llvm-action@v2
-        with:
-          version: ${{ env.LLVM_VERSION }}
-
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ env.RUST_VERSION }}
           targets: x86_64-pc-windows-msvc
-          components: rustfmt
 
       - name: Rust cache
         uses: Swatinem/rust-cache@v2
         with:
-          key: windows-x64
+          key: windows-x64-sciter
 
       - name: Cache vcpkg packages
         uses: actions/cache@v4
@@ -51,32 +41,28 @@ jobs:
           key: vcpkg-win-x64-vpx-yuv-opus-v1
 
       - name: Install vcpkg dependencies
+        run: vcpkg install libvpx:x64-windows-static libyuv:x64-windows-static opus:x64-windows-static
+
+      - name: Download sciter packfolder
+        shell: pwsh
         run: |
-          vcpkg install libvpx:x64-windows-static libyuv:x64-windows-static opus:x64-windows-static
+          New-Item -ItemType Directory -Force -Path target | Out-Null
+          $url = "https://github.com/c-smile/sciter-sdk/raw/${{ env.SCITER_SDK_COMMIT }}/bin.win/packfolder.exe"
+          Invoke-WebRequest -Uri $url -OutFile target\packfolder.exe
+          # build.rs varlık kontrolünü uzantısız yolla yapıyor
+          Copy-Item target\packfolder.exe target\packfolder
 
-      - name: Install flutter_rust_bridge_codegen
-        run: cargo install flutter_rust_bridge_codegen --version ${{ env.FRB_VERSION }} --features uuid --locked
-
-      - name: Flutter pub get
-        working-directory: flutter
-        run: flutter pub get
-
-      - name: Generate bridge
-        env:
-          LIBCLANG_PATH: ${{ env.LLVM_PATH }}\bin
-        run: flutter_rust_bridge_codegen --rust-input ./src/flutter_ffi.rs --dart-output ./flutter/lib/generated_bridge.dart
-
-      - name: Build Rust library
-        run: cargo build --features flutter --release --lib
-
-      - name: Build Flutter app
-        working-directory: flutter
-        run: flutter build windows --release
+      - name: Build (sciter UI, packui)
+        run: cargo build --release --features packui
 
       - name: Package
         shell: pwsh
         run: |
-          Compress-Archive -Path flutter\build\windows\x64\runner\Release\* -DestinationPath YedikareRemote-windows-x64.zip
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          Copy-Item target\release\hoptodesk.exe dist\YedikareRemote.exe
+          $url = "https://github.com/c-smile/sciter-sdk/raw/${{ env.SCITER_SDK_COMMIT }}/bin.win/x64/sciter.dll"
+          Invoke-WebRequest -Uri $url -OutFile dist\sciter.dll
+          Compress-Archive -Path dist\* -DestinationPath YedikareRemote-windows-x64.zip
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -90,87 +76,5 @@ jobs:
         with:
           files: YedikareRemote-windows-x64.zip
 
-  macos-arm64:
-    runs-on: macos-14
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install build tools
-        run: brew install nasm yasm create-dmg
-
-      - name: Install Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: ${{ env.RUST_VERSION }}
-          targets: aarch64-apple-darwin
-          components: rustfmt
-
-      - name: Rust cache
-        uses: Swatinem/rust-cache@v2
-        with:
-          key: macos-arm64
-
-      - name: Cache vcpkg packages
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.VCPKG_INSTALLATION_ROOT }}/installed
-          key: vcpkg-macos-arm64-vpx-yuv-opus-v1
-
-      - name: Install vcpkg dependencies
-        run: |
-          export VCPKG_ROOT=$VCPKG_INSTALLATION_ROOT
-          vcpkg install libvpx:arm64-osx libyuv:arm64-osx opus:arm64-osx
-
-      - name: Install flutter_rust_bridge_codegen
-        run: cargo install flutter_rust_bridge_codegen --version ${{ env.FRB_VERSION }} --features uuid --locked
-
-      - name: Flutter pub get
-        working-directory: flutter
-        run: flutter pub get
-
-      - name: Generate bridge
-        run: |
-          ~/.cargo/bin/flutter_rust_bridge_codegen \
-            --rust-input ./src/flutter_ffi.rs \
-            --dart-output ./flutter/lib/generated_bridge.dart \
-            --c-output ./flutter/macos/Runner/bridge_generated.h
-
-      - name: Build Rust library
-        env:
-          VCPKG_ROOT: ${{ env.VCPKG_INSTALLATION_ROOT }}
-        run: cargo build --features flutter --release --lib
-
-      - name: Build Flutter app
-        working-directory: flutter
-        run: flutter build macos --release
-
-      - name: Ad-hoc codesign
-        run: codesign --force --deep --sign - flutter/build/macos/Build/Products/Release/YedikareRemote.app
-
-      - name: Package DMG
-        run: |
-          create-dmg --volname "Yedikare Remote" --window-size 500 320 \
-            --icon "YedikareRemote.app" 120 130 \
-            --app-drop-link 360 130 \
-            YedikareRemote-macos-arm64.dmg \
-            flutter/build/macos/Build/Products/Release/YedikareRemote.app \
-            || hdiutil create -volname "Yedikare Remote" -srcfolder flutter/build/macos/Build/Products/Release/YedikareRemote.app -ov -format UDZO YedikareRemote-macos-arm64.dmg
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: YedikareRemote-macos-arm64
-          path: YedikareRemote-macos-arm64.dmg
-
-      - name: Release (on tag)
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: YedikareRemote-macos-arm64.dmg
+  # macOS işi Windows yeşile dönünce eklenecek:
+  # cargo build --features packui + cargo-bundle + libsciter-osx dylib
