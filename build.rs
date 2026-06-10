@@ -24,6 +24,8 @@ println!("cargo:rustc-link-lib=framework=SystemConfiguration");
 fn build_mac() {
     let file = "src/platform/macos.mm";
     let mut b = cc::Build::new();
+    // ObjC++ (.mm) için clang varsayılanı C++98; kod C++11+ gerektiriyor.
+    b.flag("-std=c++17");
     if let Ok(os_version::OsVersion::MacOS(v)) = os_version::detect() {
         let v = v.version;
         if v.contains("10.14") {
