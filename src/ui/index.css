@@ -58,7 +58,7 @@ svg#settings-gear:hover, svg#settings-gear:focus {
     color: #1E3A5F;
     outline: 1px solid #0090D7;
     outline-offset: 2px;
-    border-radius: 4px;
+    border-radius: 8px;
 }
 
 .main-content {
@@ -349,7 +349,7 @@ svg#settings-gear:hover, svg#settings-gear:focus {
     color: #94A3B8;
     cursor: pointer;
     padding: 2px 6px;
-    border-radius: 4px;
+    border-radius: 8px;
 }
 
 .pw-modal-close:hover {
@@ -387,7 +387,7 @@ svg#settings-gear:hover, svg#settings-gear:focus {
     width: *;
     padding: 7px 10px;
     border: 1px solid #CBD5E1;
-    border-radius: 6px;
+    border-radius: 10px;
     font-size: 0.85em;
     font-family: 'opensans-semb', Helvetica, Verdana;
     color: #1E293B;
@@ -412,7 +412,7 @@ svg#settings-gear:hover, svg#settings-gear:focus {
 
 .pw-btn {
     padding: 6px 14px;
-    border-radius: 6px;
+    border-radius: 10px;
     font-size: 0.8em;
     font-weight: 600;
     cursor: pointer;
@@ -475,7 +475,7 @@ svg#settings-gear:hover, svg#settings-gear:focus {
     vertical-align: middle;
     font-size: 0.8em;
     font-weight: 600;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
     background: #F1F5F9;
     color: #64748B;
@@ -494,7 +494,7 @@ svg#settings-gear:hover, svg#settings-gear:focus {
 
 .pw-option {
     padding: 8px 12px;
-    border-radius: 6px;
+    border-radius: 10px;
     font-size: 0.8em;
     color: #475569;
     cursor: pointer;
@@ -519,7 +519,7 @@ svg#settings-gear:hover, svg#settings-gear:focus {
     color: #0D6EFD;
     background: #E8F4FD;
     padding: 2px 8px;
-    border-radius: 4px;
+    border-radius: 8px;
     display: inline-block;
 }
 
@@ -837,7 +837,7 @@ button#install-btn {
     background: #0090D7;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     padding: 3px 14px;
     font-size: 0.8em;
     font-weight: 700;
@@ -855,7 +855,7 @@ button#mac-enable-perms-acc {
     background: #E67E22;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     padding: 3px 12px;
     font-size: 0.75em;
     font-weight: 700;
@@ -934,7 +934,7 @@ button#invite-user {
     background: transparent;
     color: #0D6EFD;
     border: 1px solid #CBD5E1;
-    border-radius: 6px;
+    border-radius: 10px;
     padding: 0 12px;
     font-size: 0.8em;
     font-weight: 600;
@@ -971,7 +971,7 @@ html.darktheme svg#settings-gear:hover, html.darktheme svg#settings-gear:focus {
     color: #E2E8F0;
     outline: 1px solid #60A5FA;
     outline-offset: 2px;
-    border-radius: 4px;
+    border-radius: 8px;
 }
 
 html.darktheme .card-device, html.darktheme .card-remote {
@@ -1278,7 +1278,7 @@ popup[role="tooltip"] {
     color: #0056b3;
     outline: 1px solid #0090D7;
     outline-offset: 2px;
-    border-radius: 4px;
+    border-radius: 8px;
 }
 
 #ticket-icon.disabled {
@@ -1298,7 +1298,7 @@ html.darktheme #ticket-icon:hover, html.darktheme #ticket-icon:focus {
     color: #93C5FD;
     outline: 1px solid #60A5FA;
     outline-offset: 2px;
-    border-radius: 4px;
+    border-radius: 8px;
 }
 
 html.darktheme #ticket-icon.disabled {
@@ -1464,7 +1464,7 @@ svg#menu {
     padding: 0.3em;
     margin: 0.3em;
     color: #94A3B8;
-    border-radius: 6px;
+    border-radius: 10px;
 }
 
 .remote-session-list svg#menu {
@@ -1701,7 +1701,7 @@ li:disabled, li:disabled:hover {
     font-weight: 500;
     font-size: 0.8em;
     color: #ffb103;
-    border-radius: 5px;
+    border-radius: 8px;
     border-spacing: 0.5em;
     border-width: 0.1em;
     border-style: solid;
@@ -1716,7 +1716,7 @@ li:disabled, li:disabled:hover {
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
-	border-radius: 4px;
+	border-radius: 8px;
 	border: 2px solid color(button);
 	outline: none;
 	cursor: pointer;
@@ -1814,7 +1814,7 @@ li:disabled, li:disabled:hover {
     padding: 8px 0;
     vertical-align: middle;
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: 10px;
 }
 
 .setting-row:hover, .setting-row:focus {

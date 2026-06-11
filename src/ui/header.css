@@ -19,7 +19,7 @@ header #screen {
   height: 16px;
   line-height: 16px;
   border: color(border) solid 1px;
-  border-radius: 3px;
+  border-radius: 8px;
   font-size: 11px;
   font-weight: 600;
   color: color(light-text);
@@ -46,13 +46,13 @@ header .remote-id {
 
 header span:hover, header button:not(.window):hover {
   background: color(gray-bg);
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 @media platform != "OSX" {
 header span:hover, header button:not(.window):hover {
   background: color(gray-bg);
-  border-radius: 4px;
+  border-radius: 8px;
 }
 }
 
@@ -77,7 +77,7 @@ div#global-screens {
 div#global-screens > div {
   position: absolute;
   border: color(border) solid 1px;
-  border-radius: 3px;
+  border-radius: 8px;
   text-align: center;
   color: color(light-text);
 }
@@ -90,7 +90,7 @@ header #screen.current, div#global-screens > div.current {
 
 button#fullscreen.active {
   border: color(border) solid 1px;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 button#display-selector {
@@ -98,7 +98,7 @@ button#display-selector {
   cursor: pointer;
   padding: 2px 6px;
   margin: * 0;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 button#display-selector svg {
@@ -145,7 +145,7 @@ button:disabled {
   font-size: 10px;
   font-weight: 500;
   padding: 5px 10px;
-  border-radius: 4px;
+  border-radius: 8px;
   white-space: nowrap;
   z-index: 10000;
   border: 1px solid rgba(255,255,255,0.1);
@@ -159,7 +159,7 @@ menu li.selected:not(.toggle-option) {
   font-weight: 700;
   color: #1A1A1A;
   background: #DBEAFE;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 menu li.toggle-option .toggle-track {
@@ -181,7 +181,7 @@ menu li.toggle-option .toggle-knob {
   display: block;
   width: 10px;
   height: 10px;
-  border-radius: 5px;
+  border-radius: 8px;
   background: white;
   position: absolute;
   top: 2px;

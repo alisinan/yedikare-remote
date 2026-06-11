@@ -18,7 +18,7 @@ table
 {
   font: system;
   border: 1px solid color(border);
-  border-radius: 6px;
+  border-radius: 10px;
   overflow: hidden;
   flow: table-fixed;
   prototype: Grid;
@@ -176,7 +176,7 @@ div.toolbar .spacer {
 div.toolbar > div.button {
   padding: 5px 8px;
   opacity: 0.55;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 div.toolbar > div.button:active {
@@ -194,7 +194,7 @@ div.toolbar > div.send {
   border-spacing: 0.4em;
   padding: 4px 10px;
   border: color(button) 1px solid;
-  border-radius: 4px;
+  border-radius: 8px;
   opacity: 1;
   background: transparent;
 }
@@ -228,7 +228,7 @@ div.remote > div.send svg {
 
 div.navbar {
   border: color(border) solid 1px;
-  border-radius: 6px;
+  border-radius: 10px;
   padding: 3px 4px;
   background: color(bg);
 }
@@ -269,7 +269,7 @@ div.title div.platform svg {
 /* -- Job table (transfer progress) ---------------- */
 
 table.job-table {
-  border-radius: 6px;
+  border-radius: 10px;
 }
 
 table.job-table tr td {
@@ -385,7 +385,7 @@ div#file-transfer.rdp-mode {
 
 .rdp-status {
   padding: 12px 16px;
-  border-radius: 6px;
+  border-radius: 10px;
   margin-bottom: 12px;
 }
 
@@ -464,7 +464,7 @@ div#file-transfer.rdp-mode {
   padding: 16px;
   background: color(bg);
   border: 1px solid color(border);
-  border-radius: 6px;
+  border-radius: 10px;
   margin-bottom: 12px;
   vertical-align: middle;
 }
@@ -496,7 +496,7 @@ div#file-transfer.rdp-mode {
   color: color(lighter-text);
   padding: 2px 8px;
   background: color(gray-bg);
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .rdp-toolbar-actions {
@@ -507,7 +507,7 @@ div#file-transfer.rdp-mode {
 
 .rdp-settings {
   border: 1px solid color(border);
-  border-radius: 6px;
+  border-radius: 10px;
   overflow: hidden;
 }
 

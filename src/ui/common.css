@@ -1,5 +1,5 @@
 html {
-    var(accent): #0052CC;
+    var(accent): #005A87;
     var(button): #0090D7;
     var(gray-bg): #F1F5F9;
     var(gray-bg-grad): #F8FAFC;
@@ -371,7 +371,7 @@ header span, header button:not(.window), menu span {
   padding: 4px 6px;
   margin: * 1px;
   color: color(light-text);
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 header button:not(.window) {
@@ -455,7 +455,7 @@ menu li.line-through {
 #tags span {
     display: inline-block;
     border: color(border) 1px solid;
-    border-radius: 6px;
+    border-radius: 10px;
     padding: 3px 0.5em;
     word-wrap: normal;
 }
@@ -596,7 +596,7 @@ menu.context.osx-popup-active {
     background: color(bg);
     border: 1px solid color(border);
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    border-radius: 6px;
+    border-radius: 10px;
     padding: 4px 0;
     min-width: 180px;
 }
