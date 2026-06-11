@@ -103,6 +103,11 @@ pub fn translate(name: String) -> String {
 
 pub fn translate_locale(name: String, locale: &str) -> String {
     let mut lang = hbb_common::config::LocalConfig::get_option("lang").to_lowercase();
+    // Yedikare: dil seçilmemişse sistem diline bakmadan Türkçe başla
+    // (kullanıcı dil menüsünden değiştirebilir).
+    if lang.is_empty() {
+        lang = "tr".to_owned();
+    }
     if lang.is_empty() {
         // zh_CN on Linux, zh-Hans-CN on mac, zh_CN_#Hans on Android
         if locale.starts_with("zh") {

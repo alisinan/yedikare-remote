@@ -113,7 +113,8 @@ pub fn start(args: &mut [String]) {
     }
     #[cfg(windows)]
     allow_err!(sciter::set_options(sciter::RuntimeOptions::UxTheming(true)));
-    frame.set_title(&crate::get_app_name());
+    // Pencere başlığında görünen ad; dosya/servis adı APP_NAME'den bağımsız.
+    frame.set_title("Yedikare Remote");
     #[cfg(target_os = "macos")]
     crate::platform::delegate::make_menubar(frame.get_host(), args.is_empty());
     #[cfg(windows)]
